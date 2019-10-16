@@ -21,6 +21,10 @@ app.use(morgan('dev'));
 
 app.use('/admin', AdminRouter);
 
+app.get('', (req, res) => {
+    res.send('Welcome TILL POS');
+})
+
 
 app.listen(port, () => {
     console.log('Server running at port', port);
