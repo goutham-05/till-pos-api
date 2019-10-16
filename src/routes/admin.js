@@ -17,7 +17,6 @@ app.get('/get-all-companies', async (req, res) => {
     try {
         
         const company = await Companies.find({});
-        console.log(company.length);
 
         if (company.length === 0) {
             result.errors.push('No companies found');
@@ -41,7 +40,6 @@ app.get('/get-active-companies', async (req, res) => {
     try {
         
         const company = await Companies.find({active: true, deleted: false});
-        console.log(company.length);
 
         if (company.length === 0) {
             result.errors.push('No companies found');
@@ -95,7 +93,6 @@ app.post('/add-company', async (req, res) => {
     const data = req.body;
     const result = { success: false, data: [], errors: [] };
     const errors = [];
-    console.log(data);
 
     if (!data.name) {
         errors.push('Company name is required');
@@ -138,7 +135,6 @@ app.delete('/delete-company/:id', async (req, res) => {
     const data = req.params.id;
     const result = { success: false, data: [], errors: [] };
     const errors = [];
-    console.log(data);
 
     if (!ObjectId.isValid(req.params.id)) {
         result.errors.push('Invalid Object id');
@@ -157,7 +153,6 @@ app.delete('/delete-company/:id', async (req, res) => {
     
         const deleteCompany = await Companies.findByIdAndUpdate(company._id, { deleted: true }, { new: true });
     
-        console.log(deleteCompany);
         result.success = true;
     
         result.data = deleteCompany;
@@ -175,7 +170,6 @@ app.patch('/revoke-company/:id', async (req, res) => {
     const data = req.params.id;
     const result = { success: false, data: [], errors: [] };
     const errors = [];
-    console.log(data);
 
     if (!ObjectId.isValid(req.params.id)) {
         result.errors.push('Invalid Object id');
@@ -213,7 +207,6 @@ app.patch('/update-company/:id', async (req, res) => {
         return res.json(result);
     }
     const updates = Object.keys(req.body);
-    console.log(updates);
     const validUpdates = ['name', 'active', 'deleted', 'privilaged']
 
     const isValidOperation = updates.every(update => {
@@ -237,7 +230,6 @@ app.patch('/update-company/:id', async (req, res) => {
 
         updates.forEach(update => {
             company[update] = req.body[update];
-            console.log(req.body[update]);
         })
         await company.save();
 
@@ -401,7 +393,6 @@ app.post('/add-item', async (req, res) => {
 app.delete('/delete-item/:id', async (req, res) => {
     const data = req.params.id;
     const result = { success: false, data: [], errors: [] };
-    console.log(data);
 
     if (!ObjectId.isValid(req.params.id)) {
         result.errors.push('Invalid Object id');
@@ -420,7 +411,6 @@ app.delete('/delete-item/:id', async (req, res) => {
     
         const deleteItem = await Items.findByIdAndUpdate(item._id, { deleted: true }, { new: true });
     
-        console.log(deleteItem);
         result.success = true;
     
         result.data = deleteItem;
@@ -438,7 +428,6 @@ app.patch('/revoke-item/:id', async (req, res) => {
     const data = req.params.id;
     const result = { success: false, data: [], errors: [] };
     const errors = [];
-    console.log(data);
 
     if (!ObjectId.isValid(req.params.id)) {
         result.errors.push('Invalid Object id');
@@ -537,7 +526,6 @@ app.post('/add-pricing-rule', async (req, res) => {
     const data = req.body;
     const result = { success: false, data: [], errors: [] };
     const errors = [];
-    console.log(data);
 
     if (!data.item) {
         errors.push('Item id is required');
@@ -575,7 +563,6 @@ app.post('/add-pricing-rule', async (req, res) => {
             discount: data.discount
         })
         const itemInserted = await newItem.save();
-        console.log(itemInserted);
         if (itemInserted.length === 0) {
             result.errors.push('Something error occured');
             return res.json(result);
@@ -609,10 +596,8 @@ app.post('/add-pricing-rule', async (req, res) => {
 
  app.get('/company-item-offer/:id', async (req, res) => {
     const data = req.params.id;
-    console.log(data);
 
     
-    console.log(req.params.id);
     const result = { success: false, data: [], errors: [] };
 
     if (!ObjectId.isValid(req.params.id)) {
@@ -626,7 +611,6 @@ app.post('/add-pricing-rule', async (req, res) => {
                     .populate('item')
                     .populate('company')
                     .exec();
-        console.log(item);
         if (item.length === 0) {
             result.errors.push('No data found');
             return res.json(result);
@@ -654,7 +638,6 @@ app.post('/add-pricing-rule', async (req, res) => {
                             .populate('item')
                             .populate('company')
                             .exec();
-        console.log('c', companies);
         if (companies.length === 0) {
             result.errors.push('No data found');
             return res.json(result);
@@ -680,7 +663,6 @@ app.post('/add-pricing-rule', async (req, res) => {
                             .populate('item')
                             .populate('company')
                             .exec();
-        console.log('c', companies);
         if (companies.length === 0) {
             result.errors.push('No data found');
             return res.json(result);
@@ -698,7 +680,6 @@ app.post('/add-pricing-rule', async (req, res) => {
  });
 
  app.patch('/update-company-offer/:id', async (req, res) => {
-    console.log('it came');
     const result = { success: false, data: [], errors: [] };
     const updates = Object.keys(req.body);
     const validUpdates = ['min_buy', 'offered_deal', 'discount', 'active', 'deleted'];
@@ -709,7 +690,6 @@ app.post('/add-pricing-rule', async (req, res) => {
                         }
                         
                         const isValidOperation = updates.every(update => {
-                            console.log(update);
                             return validUpdates.includes(update);
                         })
                         if (!isValidOperation) {
@@ -719,7 +699,6 @@ app.post('/add-pricing-rule', async (req, res) => {
 
                         try {
                             const pricngRule = await PricingRule.findById(req.params.id);
-                            console.log(pricngRule);
 
                             if (!pricngRule) {
                                 result.errors.push('Invalid offer id');
@@ -748,7 +727,6 @@ app.post('/add-pricing-rule', async (req, res) => {
  app.delete('/delete-company-offer/:id', async (req, res) => {
     const data = req.params.id;
     const result = { success: false, data: [], errors: [] };
-    console.log(data);
 
     if (!ObjectId.isValid(req.params.id)) {
         result.errors.push('Invalid Object id');
@@ -767,7 +745,6 @@ app.post('/add-pricing-rule', async (req, res) => {
     
         const deleteCompanyOffer = await PricingRule.findByIdAndUpdate(offerId._id, { deleted: true }, { new: true });
     
-        console.log(deleteCompanyOffer);
         result.success = true;
         result.data = deleteCompanyOffer;
         return res.json(result);
@@ -800,7 +777,6 @@ app.post('/add-pricing-rule', async (req, res) => {
     
         const deleteCompanyOffer = await PricingRule.findByIdAndUpdate(offerData._id, { deleted: false }, { new: true });
     
-        console.log(deleteCompanyOffer);
         result.success = true;
         result.data = deleteCompanyOffer;
         return res.json(result);
